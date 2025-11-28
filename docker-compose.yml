@@ -1,0 +1,26 @@
+
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: native-language-backend
+    ports:
+      - '8000:8000'
+    environment:
+      - MODEL_PATH=/app/../ml/saved_models/cnn_bn_final.pt
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: native-language-frontend
+    ports:
+      - '3000:80'
+    depends_on:
+      - backend
+
+networks:
+  default:
+    driver: bridge
