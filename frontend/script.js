@@ -2,6 +2,11 @@ let mediaRecorder;
 let audioChunks = [];
 let audioBlob = null;
 
+// Backend URL - works both locally and in Docker
+const BACKEND_URL = window.location.hostname === 'localhost' 
+  ? 'http://localhost:8000' 
+  : 'http://native-language-backend:8000';
+
 const recordBtn = document.getElementById('recordBtn');
 const stopBtn = document.getElementById('stopBtn');
 const submitBtn = document.getElementById('submitBtn');
@@ -59,15 +64,18 @@ submitBtn.onclick = async () => {
   formData.append('file', audioBlob, 'audio.webm');
 
   try {
-    const response = await fetch('http://localhost:8000/predict/', {
+    const response = await fetch(`${BACKEND_URL}/predict/`, {
       method: 'POST',
       body: formData
     });
-    if (!response.ok) throw new Error('Backend error');
+    if (!response.ok) {
+      const errData = await response.json().catch(() => ({}));
+      throw new Error(errData.detail || `Backend error: ${response.status}`);
+    }
     const data = await response.json();
 
     // Display result
-    stateResult.textContent = `State: ${data.state}`;
+    stateResult.innerHTML = `<strong>State:</strong> ${data.state} <strong>(Confidence:</strong> ${(data.confidence * 100).toFixed(2)}%)`;
     cuisineCards.innerHTML = '';
     if (data.cuisines && Array.isArray(data.cuisines) && data.cuisines.length > 0) {
       data.cuisines.forEach(cuisine => {
@@ -88,7 +96,7 @@ submitBtn.onclick = async () => {
     }
     resultSection.style.display = 'block';
   } catch (err) {
-    errorMsg.textContent = 'Failed to connect to backend or process audio.';
+    errorMsg.textContent = `Error: ${err.message}`;
     errorMsg.classList.remove('d-none');
   } finally {
     loadingSpinner.style.display = 'none';

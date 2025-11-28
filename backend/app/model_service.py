@@ -20,13 +20,18 @@ class ModelService:
     def load_model(self):
         if self.model is not None:
             return self.model
+        
+        print(f"Loading model from: {self.model_path}")
+        
         if not os.path.exists(self.model_path):
-            # Model file missing; keep model as None and use dummy predictions
+            print(f"Warning: Model file not found at {self.model_path}")
+            print("Using deterministic dummy predictions instead")
             self.model = None
             return None
         try:
             self.model = torch.load(self.model_path, map_location=self.device)
             self.model.eval()
+            print("Model loaded successfully")
             return self.model
         except Exception as e:
             print(f"Warning: failed to load model: {e}")
