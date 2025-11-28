@@ -1,0 +1,24 @@
+{
+  "name": "auraldine-frontend",
+  "version": "1.0.0",
+  "description": "React Native frontend for AuralDine",
+  "main": "index.js",
+  "scripts": {
+    "start": "react-native start",
+    "android": "react-native run-android",
+    "ios": "react-native run-ios",
+    "test": "jest",
+    "lint": "eslint ."
+  },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-native": "^0.73.0",
+    "axios": "^1.6.0",
+    "react-navigation": "^6.1.0"
+  },
+  "devDependencies": {
+    "jest": "^29.0.0",
+    "babel-jest": "^29.0.0",
+    "@react-native-community/eslint-config": "^3.2.0"
+  }
+}
