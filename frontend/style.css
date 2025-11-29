@@ -1,0 +1,20 @@
+body {
+  background: #f8f9fa;
+}
+
+.card {
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+#cuisineCards .card {
+  margin-bottom: 20px;
+}
+
+#stateResult {
+  font-size: 1.25rem;
+  font-weight: 500;
+}
+
+#loadingSpinner {
+  min-height: 40px;
+}
