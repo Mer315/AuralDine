@@ -1,0 +1,77 @@
+# Git
+.git
+.gitignore
+.gitattributes
+
+# IDEs
+.vscode
+.idea
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Python
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.env
+.venv
+pip-log.txt
+pip-delete-this-directory.txt
+.tox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.egg-info/
+dist/
+build/
+
+# Node/Frontend
+node_modules/
+npm-debug.log
+yarn-error.log
+.next/
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Project specific
+*.log
+*.pid
+.pytest_cache/
+.mypy_cache/
+dist/
+
+# Docker files (don't need in image)
+Dockerfile*
+.dockerignore
+docker-compose*.yml
+
+# Documentation
+README.md
+QUICK_START.md
+TROUBLESHOOTING.md
+FRONTEND_IMPLEMENTATION.md
+DOCKER_BUILD.md
+DOCKER_READY.md
+FIXED_ISSUES.md
+
+# Test files
+test_backend.py
+test.html
+docker-verify.sh
+docker-verify.bat
+
+# Backup files
+*.backup
+*.bak
+index.html.backup

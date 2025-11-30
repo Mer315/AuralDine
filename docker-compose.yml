@@ -10,6 +10,14 @@ services:
       - '8000:8000'
     environment:
       - MODEL_PATH=/app/../ml/saved_models/cnn_bn_final.pt
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/", "--connect-timeout", "5"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
 
   frontend:
     build:
@@ -17,10 +25,15 @@ services:
       dockerfile: Dockerfile
     container_name: native-language-frontend
     ports:
-      - '3000:80'
+      - '3000:3000'
     depends_on:
-      - backend
+      backend:
+        condition: service_healthy
+    networks:
+      - app-network
+    environment:
+      - BACKEND_URL=http://backend:8000
 
 networks:
-  default:
+  app-network:
     driver: bridge

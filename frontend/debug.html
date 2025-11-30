@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Debug - AuralDine</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #4A2C1A;
+      color: #FFF8E7;
+      padding: 20px;
+    }
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      background: #5A3B25;
+      padding: 20px;
+      border-radius: 10px;
+    }
+    button {
+      background: #F97316;
+      color: #1C1410;
+      border: none;
+      padding: 10px 20px;
+      margin: 10px 0;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    button:hover {
+      background: #FB923C;
+    }
+    .status {
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 5px;
+      background: #3A2618;
+    }
+    .success {
+      border-left: 4px solid #22c55e;
+    }
+    .error {
+      border-left: 4px solid #ef4444;
+    }
+    #logs {
+      background: #1C1410;
+      padding: 15px;
+      border-radius: 5px;
+      font-family: monospace;
+      font-size: 12px;
+      max-height: 400px;
+      overflow-y: auto;
+      margin-top: 15px;
+    }
+    .log-entry {
+      margin: 5px 0;
+      padding: 5px;
+      border-bottom: 1px solid #3A2618;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🐛 AuralDine Debug Console</h1>
+    
+    <div class="status">
+      <strong>Page Load Status:</strong>
+      <div id="pageStatus">Loading...</div>
+    </div>
+
+    <h2>Tests:</h2>
+    <button onclick="testTemplates()">✅ Check Templates</button>
+    <button onclick="testScripts()">✅ Check Scripts Loaded</button>
+    <button onclick="testBackend()">✅ Test Backend</button>
+    <button onclick="testInitialize()">✅ Test UI Manager</button>
+    <button onclick="simulateClick()">✅ Simulate Button Click</button>
+    <button onclick="clearLogs()">🗑️ Clear Logs</button>
+
+    <h2>Console Output:</h2>
+    <div id="logs"></div>
+  </div>
+
+  <script>
+    // Override console.log to capture all logs
+    const originalLog = console.log;
+    const originalError = console.error;
+    const originalWarn = console.warn;
+
+    function addLog(message, type = 'log') {
+      const logsDiv = document.getElementById('logs');
+      const entry = document.createElement('div');
+      entry.className = 'log-entry';
+      const timestamp = new Date().toLocaleTimeString();
+      entry.textContent = `[${timestamp}] ${type.toUpperCase()}: ${message}`;
+      logsDiv.appendChild(entry);
+      logsDiv.scrollTop = logsDiv.scrollHeight;
+    }
+
+    console.log = function(...args) {
+      originalLog(...args);
+      addLog(args.join(' '), 'log');
+    };
+
+    console.error = function(...args) {
+      originalError(...args);
+      addLog(args.join(' '), 'error');
+    };
+
+    console.warn = function(...args) {
+      originalWarn(...args);
+      addLog(args.join(' '), 'warn');
+    };
+
+    // Test functions
+    function testTemplates() {
+      addLog('Checking templates...', 'test');
+      const templates = Array.from(document.querySelectorAll('template'));
+      addLog(`Found ${templates.length} templates`, 'info');
+      templates.forEach(t => {
+        addLog(`  - Template ID: "${t.id}"`, 'info');
+      });
+    }
+
+    function testScripts() {
+      addLog('Checking scripts...', 'test');
+      addLog(`AudioRecorder: ${typeof window.AudioRecorder}`, 'info');
+      addLog(`AccentAPI: ${typeof window.AccentAPI}`, 'info');
+      addLog(`UIManager: ${typeof window.UIManager}`, 'info');
+      addLog(`uiManager instance: ${typeof window.uiManager}`, 'info');
+    }
+
+    async function testBackend() {
+      addLog('Testing backend connection...', 'test');
+      try {
+        const response = await fetch('http://localhost:5000/');
+        const data = await response.json();
+        addLog(`✅ Backend connected: ${JSON.stringify(data)}`, 'success');
+      } catch (error) {
+        addLog(`❌ Backend error: ${error.message}`, 'error');
+      }
+    }
+
+    function testInitialize() {
+      addLog('Testing UI Manager initialization...', 'test');
+      if (window.uiManager) {
+        addLog('✅ UIManager already initialized', 'success');
+        addLog(`Current page: ${window.uiManager.currentPage}`, 'info');
+      } else {
+        addLog('❌ UIManager not initialized', 'error');
+      }
+    }
+
+    function simulateClick() {
+      addLog('Simulating button click...', 'test');
+      const btn = document.getElementById('getStartedBtn');
+      if (btn) {
+        addLog('✅ Button found, triggering click', 'success');
+        btn.click();
+      } else {
+        addLog('❌ Button not found', 'error');
+      }
+    }
+
+    function clearLogs() {
+      document.getElementById('logs').innerHTML = '';
+    }
+
+    // Initial checks
+    window.addEventListener('load', () => {
+      addLog('🎉 Page fully loaded', 'info');
+      testScripts();
+      testTemplates();
+    });
+
+    // Log immediately if already loaded
+    if (document.readyState === 'complete' || document.readyState === 'interactive') {
+      addLog('📄 Document ready', 'info');
+    }
+  </script>
+
+  <!-- Load the actual scripts -->
+  <script src="scripts/recorder.js"></script>
+  <script src="scripts/api.js"></script>
+  <script src="scripts/ui.js"></script>
+</body>
+</html>
