@@ -57,7 +57,7 @@ Examples:
 - Matplotlib, Seaborn  
 - Streamlit / Flask (prototype UI)
 
-##🚀 How to Run the App
+#🚀 How to Run the App
 
 ### 🖥️ Local Development
 
@@ -75,6 +75,7 @@ npm install
 npm run dev
 ```
 Frontend runs at: [http://localhost:5173](http://localhost:3000)
+
 ---
 
 ### 🐳 Running with Docker
