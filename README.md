@@ -57,9 +57,9 @@ Examples:
 - Matplotlib, Seaborn  
 - Streamlit / Flask (prototype UI)
 
-  # 🚀 How to Run the App
+##🚀 How to Run the App
 
-## 🖥️ Local Development
+### 🖥️ Local Development
 
 - 1. Start the Backend
 ```bash
@@ -74,21 +74,21 @@ cd frontend
 npm install
 npm run dev
 ```
-Frontend runs at: [http://localhost:5173](http://localhost:5173)
+Frontend runs at: [http://localhost:5173](http://localhost:3000)
 ---
 
-## 🐳 Running with Docker
+### 🐳 Running with Docker
 
--1. Build Containers
+-  1. Build Containers
 ```bash
 docker compose build
 ```
--2. Start All Services
+-  2. Start All Services
 ```bash
 docker compose up
 ```
 This starts:
-* **Frontend** → [http://localhost:5173](http://localhost:5173)
+* **Frontend** → [http://localhost:5173](http://localhost:3000)
 * **Backend (FastAPI)** → [http://localhost:8000](http://localhost:8000)
 * **ML Service** → [http://localhost:7000](http://localhost:7000)
 - 🔄 Rebuild After Code Changes
