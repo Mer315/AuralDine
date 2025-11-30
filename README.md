@@ -57,6 +57,50 @@ Examples:
 - Matplotlib, Seaborn  
 - Streamlit / Flask (prototype UI)
 
+  # 🚀 How to Run the App
+
+## 🖥️ Local Development
+
+- 1. Start the Backend
+```bash
+cd backend
+pip install -r requirements.txt
+uvicorn main:app --reload
+```
+Backend runs at: [http://localhost:8000](http://localhost:8000)
+- 2. Start the Frontend
+```bash
+cd frontend
+npm install
+npm run dev
+```
+Frontend runs at: [http://localhost:5173](http://localhost:5173)
+---
+
+## 🐳 Running with Docker
+
+-1. Build Containers
+```bash
+docker compose build
+```
+-2. Start All Services
+```bash
+docker compose up
+```
+This starts:
+* **Frontend** → [http://localhost:5173](http://localhost:5173)
+* **Backend (FastAPI)** → [http://localhost:8000](http://localhost:8000)
+* **ML Service** → [http://localhost:7000](http://localhost:7000)
+- 🔄 Rebuild After Code Changes
+```bash
+docker compose down
+docker compose up --build
+```
+---
+
+
+
+
 ## 📈 Key Insights
 - HuBERT + CNN-BN outperforms MFCC baselines
 - Sentence-level speech produces the most stable accent cues
