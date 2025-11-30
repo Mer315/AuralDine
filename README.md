@@ -57,7 +57,7 @@ Examples:
 - Matplotlib, Seaborn  
 - Streamlit / Flask (prototype UI)
 
-#🚀 How to Run the App
+## 🚀 How to Run the App
 
 ### 🖥️ Local Development
 
