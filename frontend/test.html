@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AuralDine - System Test</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #4A2C1A;
+      color: #FFF8E7;
+      padding: 20px;
+      line-height: 1.6;
+    }
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    h1 {
+      margin-bottom: 10px;
+      text-align: center;
+      color: #F97316;
+    }
+    .subtitle {
+      text-align: center;
+      color: #D4C4B0;
+      margin-bottom: 30px;
+    }
+    .test-section {
+      background: #5A3B25;
+      border: 2px solid #F97316;
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+    .test-item {
+      background: #2A1A0F;
+      border-left: 4px solid #F97316;
+      padding: 15px;
+      margin-bottom: 10px;
+      border-radius: 4px;
+    }
+    .test-item.pass { border-left-color: #22c55e; }
+    .test-item.fail { border-left-color: #ef4444; }
+    .test-item.pending { border-left-color: #f59e0b; }
+    
+    .status {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-weight: bold;
+      margin-right: 10px;
+      font-size: 12px;
+    }
+    .status.pass { background: #22c55e; color: black; }
+    .status.fail { background: #ef4444; color: white; }
+    .status.pending { background: #f59e0b; color: black; }
+    
+    button {
+      background: #F97316;
+      color: #1C1410;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+      margin: 10px 5px 10px 0;
+      transition: all 0.3s;
+    }
+    button:hover { background: #FBBF24; transform: scale(1.05); }
+    button:disabled { background: #666; cursor: not-allowed; transform: none; }
+    
+    .output {
+      background: #1C1410;
+      border: 1px solid #F97316;
+      border-radius: 4px;
+      padding: 10px;
+      margin-top: 10px;
+      font-family: monospace;
+      font-size: 12px;
+      max-height: 200px;
+      overflow-y: auto;
+      color: #FBBF24;
+    }
+    
+    .summary {
+      background: #1C1410;
+      border: 2px solid #F97316;
+      border-radius: 10px;
+      padding: 20px;
+      text-align: center;
+      font-size: 18px;
+      margin-top: 20px;
+    }
+    .summary.success { border-color: #22c55e; }
+    .summary.error { border-color: #ef4444; }
+    
+    .progress-bar {
+      width: 100%;
+      height: 30px;
+      background: #2A1A0F;
+      border-radius: 15px;
+      overflow: hidden;
+      margin: 10px 0;
+    }
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #F97316, #FBBF24);
+      width: 0%;
+      transition: width 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #1C1410;
+      font-weight: bold;
+      font-size: 12px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🎤 AuralDine - System Test Suite</h1>
+    <p class="subtitle">Verify all components are working correctly</p>
+
+    <!-- JavaScript Modules Test -->
+    <div class="test-section">
+      <h2>JavaScript Modules</h2>
+      <div class="test-item" id="test-recorder">
+        <span class="status pending">PENDING</span>
+        <strong>recorder.js</strong> - Audio recording module
+      </div>
+      <div class="test-item" id="test-api">
+        <span class="status pending">PENDING</span>
+        <strong>api.js</strong> - Backend communication module
+      </div>
+      <div class="test-item" id="test-ui">
+        <span class="status pending">PENDING</span>
+        <strong>ui.js</strong> - UI management module
+      </div>
+    </div>
+
+    <!-- Backend Connectivity Test -->
+    <div class="test-section">
+      <h2>Backend Connectivity</h2>
+      <button onclick="testBackend()">Test Backend</button>
+      <div class="test-item" id="test-backend">
+        <span class="status pending">PENDING</span>
+        <strong>Backend Server</strong> - http://localhost:5000
+      </div>
+      <div id="backend-output" class="output" style="display:none;"></div>
+    </div>
+
+    <!-- Browser APIs Test -->
+    <div class="test-section">
+      <h2>Browser APIs</h2>
+      <div class="test-item" id="test-microphone">
+        <span class="status pending">PENDING</span>
+        <strong>getUserMedia API</strong> - Microphone access
+      </div>
+      <button onclick="testMicrophone()">Test Microphone</button>
+      <div class="test-item" id="test-audio-context">
+        <span class="status pending">PENDING</span>
+        <strong>Web Audio API</strong> - Audio context
+      </div>
+      <div class="test-item" id="test-fetch">
+        <span class="status pending">PENDING</span>
+        <strong>Fetch API</strong> - Network requests
+      </div>
+    </div>
+
+    <!-- UI Elements Test -->
+    <div class="test-section">
+      <h2>UI Elements</h2>
+      <button onclick="testUIElements()">Test UI Elements</button>
+      <div id="ui-output" class="output" style="display:none;"></div>
+    </div>
+
+    <!-- Data Test -->
+    <div class="test-section">
+      <h2>Data & Mapping</h2>
+      <button onclick="testDataMapping()">Test Data Mapping</button>
+      <div id="data-output" class="output" style="display:none;"></div>
+    </div>
+
+    <!-- Progress -->
+    <div class="progress-bar">
+      <div class="progress-fill" id="progress" style="width: 0%;">0%</div>
+    </div>
+
+    <!-- Summary -->
+    <div class="summary" id="summary" style="display:none;"></div>
+
+    <!-- Actions -->
+    <div style="text-align: center; margin-top: 20px;">
+      <button onclick="runAllTests()"><strong>RUN ALL TESTS</strong></button>
+      <button onclick="clearTests()" style="background: #666;">Clear Results</button>
+      <button onclick="location.href='index.html'" style="background: #F97316;">Go to App</button>
+    </div>
+  </div>
+
+  <script>
+    let testResults = {};
+    let testCount = 0;
+    let passCount = 0;
+
+    function updateStatus(testId, status, message = '') {
+      const testElement = document.getElementById(testId);
+      if (testElement) {
+        const statusSpan = testElement.querySelector('.status');
+        statusSpan.className = `status ${status}`;
+        statusSpan.textContent = status.toUpperCase();
+        
+        if (message) {
+          if (!testElement.querySelector('.message')) {
+            const msgDiv = document.createElement('div');
+            msgDiv.className = 'message';
+            msgDiv.style.fontSize = '12px';
+            msgDiv.style.marginTop = '5px';
+            msgDiv.style.color = '#D4C4B0';
+            testElement.appendChild(msgDiv);
+          }
+          testElement.querySelector('.message').textContent = message;
+        }
+      }
+      
+      testResults[testId] = status;
+      updateProgress();
+    }
+
+    function updateProgress() {
+      testCount = Object.keys(testResults).length;
+      passCount = Object.values(testResults).filter(s => s === 'pass').length;
+      const percent = testCount > 0 ? Math.round((passCount / testCount) * 100) : 0;
+      const progressFill = document.getElementById('progress');
+      progressFill.style.width = percent + '%';
+      progressFill.textContent = percent + '%';
+    }
+
+    function showOutput(elementId, text) {
+      const outputDiv = document.getElementById(elementId);
+      outputDiv.style.display = 'block';
+      outputDiv.textContent = text;
+    }
+
+    // Test JavaScript Modules
+    function testModules() {
+      const recorderLoaded = typeof AudioRecorder !== 'undefined';
+      updateStatus('test-recorder', recorderLoaded ? 'pass' : 'fail', 
+        recorderLoaded ? 'Loaded successfully' : 'Not found');
+      
+      const apiLoaded = typeof AccentAPI !== 'undefined';
+      updateStatus('test-api', apiLoaded ? 'pass' : 'fail',
+        apiLoaded ? 'Loaded successfully' : 'Not found');
+      
+      const uiLoaded = typeof UIManager !== 'undefined';
+      updateStatus('test-ui', uiLoaded ? 'pass' : 'fail',
+        uiLoaded ? 'Loaded successfully' : 'Not found');
+    }
+
+    // Test Backend Connectivity
+    async function testBackend() {
+      updateStatus('test-backend', 'pending', 'Testing...');
+      try {
+        const response = await fetch('http://localhost:5000/', {
+          method: 'GET',
+          headers: { 'Content-Type': 'application/json' }
+        });
+        
+        if (response.ok) {
+          const data = await response.json();
+          updateStatus('test-backend', 'pass', `Connected: ${data.message}`);
+          showOutput('backend-output', JSON.stringify(data, null, 2));
+        } else {
+          updateStatus('test-backend', 'fail', `HTTP ${response.status}`);
+          showOutput('backend-output', `HTTP Error: ${response.status}`);
+        }
+      } catch (error) {
+        updateStatus('test-backend', 'fail', `Connection failed: ${error.message}`);
+        showOutput('backend-output', `Error: ${error.message}\n\nMake sure backend is running on port 5000`);
+      }
+    }
+
+    // Test Microphone
+    async function testMicrophone() {
+      updateStatus('test-microphone', 'pending', 'Requesting access...');
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        updateStatus('test-microphone', 'pass', 'Permission granted');
+        stream.getTracks().forEach(track => track.stop());
+      } catch (error) {
+        updateStatus('test-microphone', 'fail', `${error.name}: ${error.message}`);
+      }
+    }
+
+    // Test Browser APIs
+    function testBrowserAPIs() {
+      // Audio Context
+      const AudioContext = window.AudioContext || window.webkitAudioContext;
+      if (AudioContext) {
+        try {
+          new AudioContext();
+          updateStatus('test-audio-context', 'pass', 'Available');
+        } catch (e) {
+          updateStatus('test-audio-context', 'fail', e.message);
+        }
+      } else {
+        updateStatus('test-audio-context', 'fail', 'Not supported');
+      }
+
+      // Fetch API
+      if (typeof fetch !== 'undefined') {
+        updateStatus('test-fetch', 'pass', 'Available');
+      } else {
+        updateStatus('test-fetch', 'fail', 'Not supported');
+      }
+    }
+
+    // Test UI Elements
+    async function testUIElements() {
+      updateStatus('test-ui', 'pending', 'Checking...');
+      showOutput('ui-output', 'Checking UI elements...\n');
+      
+      const elements = {
+        'appRoot': '#appRoot',
+        'homePageTemplate': '#homePageTemplate',
+        'accentDetectorTemplate': '#accentDetectorTemplate',
+        'getStartedBtn': '#getStartedBtn (in template)',
+        'micBtn': '#micBtn (in template)'
+      };
+
+      const output = document.getElementById('ui-output');
+      let allFound = true;
+
+      for (const [name, selector] of Object.entries(elements)) {
+        const found = document.querySelector(selector) !== null;
+        const status = found ? '✓' : '✗';
+        output.textContent += `${status} ${name}\n`;
+        if (!found) allFound = false;
+      }
+
+      updateStatus('test-ui', allFound ? 'pass' : 'fail', 
+        allFound ? 'All elements found' : 'Some elements missing');
+    }
+
+    // Test Data Mapping
+    async function testDataMapping() {
+      showOutput('data-output', 'Testing data mapping...\n');
+      const output = document.getElementById('data-output');
+
+      if (typeof AccentAPI === 'undefined') {
+        output.textContent += '✗ AccentAPI not loaded\n';
+        return;
+      }
+
+      try {
+        const api = new AccentAPI();
+        const regions = api.getRegions();
+        output.textContent += `✓ Found ${regions.length} regions:\n`;
+        regions.forEach(r => output.textContent += `  • ${r}\n`);
+        
+        const testRegion = regions[0];
+        const cuisines = api.getCuisineByRegion(testRegion);
+        output.textContent += `\n✓ Cuisine for ${testRegion}: ${cuisines.name}\n`;
+        output.textContent += `  Dishes: ${cuisines.dishes.join(', ')}\n`;
+      } catch (error) {
+        output.textContent += `✗ Error: ${error.message}`;
+      }
+    }
+
+    // Run All Tests
+    async function runAllTests() {
+      testResults = {};
+      document.getElementById('summary').style.display = 'none';
+      
+      testModules();
+      testBrowserAPIs();
+      await testBackend();
+      
+      // Summary
+      const summary = document.getElementById('summary');
+      const percent = testCount > 0 ? Math.round((passCount / testCount) * 100) : 0;
+      
+      if (passCount === testCount) {
+        summary.className = 'summary success';
+        summary.innerHTML = `<strong>✓ All Tests Passed!</strong><br/>Everything is working correctly.`;
+      } else {
+        summary.className = 'summary error';
+        summary.innerHTML = `<strong>⚠ ${passCount}/${testCount} Tests Passed</strong><br/>Check failed items above.`;
+      }
+      summary.style.display = 'block';
+    }
+
+    // Clear Tests
+    function clearTests() {
+      testResults = {};
+      document.querySelectorAll('.test-item .status').forEach(el => {
+        el.className = 'status pending';
+        el.textContent = 'PENDING';
+      });
+      document.querySelectorAll('.test-item .message').forEach(el => el.remove());
+      document.querySelectorAll('.output').forEach(el => el.style.display = 'none');
+      document.getElementById('summary').style.display = 'none';
+      document.getElementById('progress').style.width = '0%';
+      document.getElementById('progress').textContent = '0%';
+    }
+
+    // Auto-test on load
+    window.addEventListener('load', () => {
+      testModules();
+      testBrowserAPIs();
+    });
+  </script>
+</body>
+</html>
